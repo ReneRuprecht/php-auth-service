@@ -1,0 +1,20 @@
+FROM php:8.5-fpm
+
+RUN curl -1sLf https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh | bash
+
+RUN apt-get update && apt-get install -y \
+    symfony-cli
+
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+ARG UID=1000
+ARG GID=1000
+
+RUN groupadd -g $GID appgroup \
+    && useradd -u $UID -g appgroup -m appuser
+
+WORKDIR /app
+
+USER appuser
+
+CMD ["php-fpm"]
