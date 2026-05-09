@@ -18,7 +18,6 @@ class HealthController extends AbstractController
         'status' => 'ok',
         'service' => 'auth-service',
         'timestamp' => time()
-
       ],
       Response::HTTP_OK
     );

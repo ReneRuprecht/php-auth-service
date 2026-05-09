@@ -1,0 +1,27 @@
+name: Test Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: self-hosted
+    container:
+      image: reneruprecht/ci-php85
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Composer install
+        working-directory: backend
+        run: |
+          composer install --no-interaction --prefer-dist
+
+      - name: Run phpunit
+        working-directory: backend
+        run: |
+          APP_ENV=test php bin/phpunit
