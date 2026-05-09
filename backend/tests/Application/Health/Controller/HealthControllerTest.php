@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HealthControllerTest extends WebTestCase
 {
-    public function testSomething(): void
+    public function testHealthController(): void
     {
         $client = static::createClient();
         $client->request('GET', '/health');
@@ -19,5 +19,8 @@ class HealthControllerTest extends WebTestCase
         $this->assertArrayHasKey('status', $data);
         $this->assertArrayHasKey('service', $data);
         $this->assertArrayHasKey('timestamp', $data);
+
+        $this->assertEquals('ok', $data['status']);
+        $this->assertEquals('auth-service', $data['service']);
     }
 }

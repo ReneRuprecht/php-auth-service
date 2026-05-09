@@ -3,7 +3,10 @@ FROM php:8.5-fpm
 RUN curl -1sLf https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh | bash
 
 RUN apt-get update && apt-get install -y \
-    symfony-cli
+    symfony-cli \
+    libpq-dev \
+    postgresql-client \
+    && docker-php-ext-install pdo_pgsql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
