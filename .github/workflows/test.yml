@@ -6,13 +6,45 @@ on:
       - main
 
 jobs:
-  test:
+  unit:
+    runs-on: self-hosted
+    container:
+      image: reneruprecht/ci-php85
+    env:
+      APP_ENV: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Cache Composer
+        uses: actions/cache@v5
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Composer install
+        working-directory: backend
+        run: |
+          composer install --no-interaction --prefer-dist
+
+      - name: Run unit tests
+        working-directory: backend
+        run: |
+          php bin/phpunit --testsuite unit
+          
+  application:
+    needs: unit
     runs-on: self-hosted
     container:
       image: reneruprecht/ci-php85
     env:
       DB_HOST: postgres
       APP_ENV: test
+      COMPOSER_CACHE_DIR: ~/.composer/cache
     services:
       postgres:
         image: postgres:18-alpine
@@ -27,19 +59,22 @@ jobs:
           --health-retries 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - name: Cache Composer
+        uses: actions/cache@v5
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
       - name: Composer install
         working-directory: backend
         run: |
           composer install --no-interaction --prefer-dist
-
-      - name: Run unit tests
-        working-directory: backend
-        run: |
-          php bin/phpunit --testsuite unit
           
       - name: Setup db
         working-directory: backend
@@ -50,6 +85,52 @@ jobs:
         working-directory: backend
         run: |
           php bin/phpunit --testsuite application
+
+
+  integration:
+    needs: unit
+    runs-on: self-hosted
+    container:
+      image: reneruprecht/ci-php85
+    env:
+      DB_HOST: postgres
+      APP_ENV: test
+      COMPOSER_CACHE_DIR: ~/.composer/cache
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "postgres"
+          POSTGRES_DB: "app_test"
+        options: >- 
+          --health-cmd pg_isready
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Cache Composer
+        uses: actions/cache@v5
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Composer install
+        working-directory: backend
+        run: |
+          composer install --no-interaction --prefer-dist
+          
+      - name: Setup db
+        working-directory: backend
+        run: |
+          php bin/console doctrine:migrations:migrate --no-interaction
 
       - name: Run integration tests
         working-directory: backend
