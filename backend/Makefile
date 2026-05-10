@@ -11,6 +11,7 @@ help:
 		@echo " make cf-fix                run cs-fixer fix"
 		@echo " make cf-diff               run cs-fixer fix --dry-run --diff"
 		@echo " make check                 run phpstan, cf-diff"
+		@echo " make create-keys           create config/jwt_test keys"
 
 db-migrate:
 	php bin/console doctrine:migrations:migrate --no-interaction
@@ -69,3 +70,8 @@ cf-diff:
 		fi
 
 check: phpstan cf-diff
+
+create-keys:
+		mkdir -p config/jwt_test
+		openssl genrsa -out config/jwt_test/private.pem 2048
+		openssl rsa -pubout -in config/jwt_test/private.pem -out config/jwt_test/public.pem 

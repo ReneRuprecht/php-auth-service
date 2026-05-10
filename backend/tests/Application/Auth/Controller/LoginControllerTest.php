@@ -42,8 +42,8 @@ class LoginControllerTest extends WebTestCase
 
         $response = json_decode($client->getResponse()->getContent(), true);
 
-        $this->assertArrayHasKey('id', $response);
-        $this->assertEquals($email, $response['email']);
+        $this->assertArrayHasKey('token', $response);
+        $this->assertNotEmpty($response['token']);
     }
 
     public function testLoginControllerReturns404IfUserNotFound(): void

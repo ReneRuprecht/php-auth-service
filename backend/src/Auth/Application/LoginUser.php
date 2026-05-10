@@ -7,7 +7,7 @@ use App\Auth\Domain\UserEmail;
 
 class LoginUser
 {
-    public function __construct(private UserRepositoryPort $repo, private PasswordHasherPort $hasher)
+    public function __construct(private UserRepositoryPort $repo, private PasswordHasherPort $hasher, private TokenServicePort $tokenService)
     {
     }
 
@@ -28,6 +28,8 @@ class LoginUser
             throw new InvalidCredentialsException();
         }
 
-        return new LoginResultDto($user->getUserID(), $user->getEmail());
+        $token = $this->tokenService->create($user);
+
+        return new LoginResultDto($token);
     }
 }

@@ -21,8 +21,7 @@ class LoginController
         $result = $this->loginUser->execute($dto);
 
         return new JsonResponse([
-            'id' => $result->userID,
-            'email' => $result->email,
+            'token' => $result->token,
         ], 200);
     }
 }

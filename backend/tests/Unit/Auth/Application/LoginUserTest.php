@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Auth\Application;
 use App\Auth\Application\LoginUser;
 use App\Auth\Application\LoginUserDto;
 use App\Auth\Application\PasswordHasherPort;
+use App\Auth\Application\TokenServicePort;
 use App\Auth\Application\UserRepositoryPort;
 use App\Auth\Domain\Exception\InvalidCredentialsException;
 use App\Auth\Domain\User;
@@ -26,11 +27,13 @@ class LoginUserTest extends TestCase
 
         $repo = $this->createMock(UserRepositoryPort::class);
         $hasher = $this->createMock(PasswordHasherPort::class);
+        $tokenService = $this->createMock(TokenServicePort::class);
 
         $repo->expects($this->once())->method('findByEmail')->with($email)->willReturn($user);
         $hasher->expects($this->once())->method('verify')->with($dto->password, $user->getPassword())->willReturn(true);
+        $tokenService->expects($this->once())->method('create')->willReturn('fake-token');
 
-        $useCase = new LoginUser($repo, $hasher);
+        $useCase = new LoginUser($repo, $hasher, $tokenService);
 
         $useCase->execute($dto);
     }
@@ -42,11 +45,13 @@ class LoginUserTest extends TestCase
 
         $repo = $this->createMock(UserRepositoryPort::class);
         $hasher = $this->createMock(PasswordHasherPort::class);
+        $tokenService = $this->createMock(TokenServicePort::class);
 
         $repo->expects($this->once())->method('findByEmail')->with($email)->willReturn(null);
         $hasher->expects($this->never())->method('verify');
+        $tokenService->expects($this->never())->method('create');
 
-        $useCase = new LoginUser($repo, $hasher);
+        $useCase = new LoginUser($repo, $hasher, $tokenService);
 
         $this->expectException(InvalidCredentialsException::class);
 
@@ -64,11 +69,13 @@ class LoginUserTest extends TestCase
 
         $repo = $this->createMock(UserRepositoryPort::class);
         $hasher = $this->createMock(PasswordHasherPort::class);
+        $tokenService = $this->createMock(TokenServicePort::class);
 
         $repo->expects($this->once())->method('findByEmail')->with($email)->willReturn($user);
         $hasher->expects($this->once())->method('verify')->with($dto->password, $user->getPassword())->willReturn(false);
+        $tokenService->expects($this->never())->method('create');
 
-        $useCase = new LoginUser($repo, $hasher);
+        $useCase = new LoginUser($repo, $hasher, $tokenService);
 
         $this->expectException(InvalidCredentialsException::class);
 
