@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  unit:
+  quality:
     runs-on: self-hosted
     container:
       image: reneruprecht/ci-php85
@@ -29,7 +29,43 @@ jobs:
       - name: Composer install
         working-directory: backend
         run: |
-          composer install --no-interaction --prefer-dist
+          composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run phpstan
+        working-directory: backend
+        run: |
+          ./vendor/bin/phpstan analyze src tests --no-progress
+
+      - name: Run php-cs-fixer diff
+        working-directory: backend
+        run: |
+          ./vendor/bin/php-cs-fixer fix --dry-run --diff
+
+  unit:
+    needs: quality
+    runs-on: self-hosted
+    container:
+      image: reneruprecht/ci-php85
+    env:
+      APP_ENV: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Cache Composer
+        uses: actions/cache@v5
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('backend/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Composer install
+        working-directory: backend
+        run: |
+          composer install --no-interaction --prefer-dist --no-progress
 
       - name: Run unit tests
         working-directory: backend
@@ -74,7 +110,7 @@ jobs:
       - name: Composer install
         working-directory: backend
         run: |
-          composer install --no-interaction --prefer-dist
+          composer install --no-interaction --prefer-dist --no-progress
           
       - name: Setup db
         working-directory: backend

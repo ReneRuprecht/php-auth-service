@@ -1,5 +1,5 @@
 
-.PHONY: help test db-migrate wait-db test-unit test-application test-integration test-db-migrate
+.PHONY: help test db-migrate wait-db test-unit test-application test-integration test-db-migrate phpstan cs-fix cs-diff check
 
 help:
 		@echo " Commands:"
@@ -8,11 +8,15 @@ help:
 		@echo " test-application      run application tests"
 		@echo " test-integration      run integration tests"
 		@echo " test-db-migrate       run test db migrations"
+		@echo " phpstan               run phpstan analyze src tests"
+		@echo " cs-fix                run cs-fixer fix"
+		@echo " cs-diff               run cs-fixer fix --dry-run --diff"
+		@echo " check                 run phpstan, cf-diff"
 
 db-migrate:
 	php bin/console doctrine:migrations:migrate --no-interaction
 
-test-unit: 
+test-unit:
 		@output=$$(APP_ENV=test php bin/phpunit --testsuite unit 2>&1); \
 		code=$$?; \
 		if [ $$code -eq 0 ]; then \
@@ -41,3 +45,28 @@ test-integration: test-db-migrate
 
 test-db-migrate:
 	APP_ENV=test php bin/console doctrine:migrations:migrate --no-interaction
+
+phpstan:
+		@output=$$(./vendor/bin/phpstan analyze src tests 2>&1); \
+		code=$$?; \
+		if [ $$code -eq 0 ]; then \
+			echo "PHPSTAN \033[0;32mOK\033[0m"; \
+		else \
+			echo "$$output"; \
+		    echo "PHPSTAN \033[0;31mERROR\033[0m"; \
+		fi
+
+cf-fix:
+	./vendor/bin/php-cs-fixer fix
+
+cf-diff:
+		@output=$$(./vendor/bin/php-cs-fixer fix --dry-run --diff 2>&1); \
+		code=$$?; \
+		if [ $$code -eq 0 ]; then \
+			echo "CS FIXER \033[0;32mOK\033[0m"; \
+		else \
+			echo "$$output"; \
+		    echo "CS FIXER \033[0;31mERROR\033[0m"; \
+		fi
+
+check: phpstan cf-diff

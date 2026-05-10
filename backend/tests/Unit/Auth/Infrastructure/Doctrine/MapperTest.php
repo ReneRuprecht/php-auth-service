@@ -10,34 +10,32 @@ use Symfony\Component\Uid\Uuid;
 
 class MapperTest extends TestCase
 {
+    public function testToDomain(): void
+    {
+        $entity = new UserEntity();
+        $entity->id = Uuid::v7();
+        $entity->email = 'test@example.com';
+        $entity->password = 'password';
 
-  public function testToDomain(): void
-  {
+        $user = UserMapper::toDomain($entity);
 
-    $entity = new UserEntity();
-    $entity->id = Uuid::v7();
-    $entity->email = 'test@example.com';
-    $entity->password = 'password';
+        $this->assertNotEmpty($user->getId());
+        $this->assertEquals('test@example.com', $user->getEmail());
+        $this->assertNotEmpty($user->getPassword());
+    }
 
-    $user =  UserMapper::toDomain($entity);
+    public function testToEntity(): void
+    {
+        $user = new User(
+            Uuid::v7(),
+            'test@example.com',
+            'password'
+        );
 
-    $this->assertNotEmpty($user->getId());
-    $this->assertEquals('test@example.com', $user->getEmail());
-    $this->assertNotEmpty($user->getPassword());
-  }
+        $entity = UserMapper::toEntity($user);
 
-  public function testToEntity(): void
-  {
-    $user = new User(
-      Uuid::v7(),
-      'test@example.com',
-      'password'
-    );
-
-    $entity = UserMapper::toEntity($user);
-
-    $this->assertNotEmpty($entity->id);
-    $this->assertEquals('test@example.com', $entity->email);
-    $this->assertEquals('password', $entity->password);
-  }
+        $this->assertNotEmpty($entity->id);
+        $this->assertEquals('test@example.com', $entity->email);
+        $this->assertEquals('password', $entity->password);
+    }
 }

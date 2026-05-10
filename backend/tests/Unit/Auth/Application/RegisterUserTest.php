@@ -9,16 +9,16 @@ use PHPUnit\Framework\TestCase;
 
 class RegisterUserTest extends TestCase
 {
-  public function testRegisterUser(): void
-  {
-    $repo = $this->createMock(UserRepositoryPort::class);
+    public function testRegisterUser(): void
+    {
+        $repo = $this->createMock(UserRepositoryPort::class);
 
-    $repo->expects($this->once())->method('save');
+        $repo->expects($this->once())->method('save');
 
-    $useCase = new RegisterUser($repo);
+        $useCase = new RegisterUser($repo);
 
-    $dto = new RegisterUserDto("test@example.com", "password");
+        $dto = new RegisterUserDto('test@example.com', 'password');
 
-    $useCase->execute($dto);
-  }
+        $useCase->execute($dto);
+    }
 }

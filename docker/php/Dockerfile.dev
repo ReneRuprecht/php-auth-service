@@ -5,6 +5,7 @@ RUN curl -1sLf https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh | bas
 RUN apt-get update && apt-get install -y \
     symfony-cli \
     libpq-dev \
+    unzip \
     postgresql-client \
     && docker-php-ext-install pdo_pgsql
 
