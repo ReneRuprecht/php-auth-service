@@ -3,14 +3,16 @@
 namespace App\Auth\Infrastructure\Doctrine;
 
 use App\Auth\Domain\User;
-use Symfony\Component\Uid\UuidV7;
+use App\Auth\Domain\UserEmail;
+use App\Auth\Domain\UserID;
+use App\Auth\Domain\UserPassword;
 
 class UserMapper
 {
     public static function toEntity(User $user): UserEntity
     {
         $entity = new UserEntity();
-        $entity->id = $user->getId();
+        $entity->id = $user->getUserID();
         $entity->email = $user->getEmail();
         $entity->password = $user->getPassword();
 
@@ -19,8 +21,10 @@ class UserMapper
 
     public static function toDomain(UserEntity $entity): User
     {
-        $id = UuidV7::fromString($entity->id);
+        $id = UserID::fromString($entity->id);
+        $email = UserEmail::fromString($entity->email);
+        $password = UserPassword::fromHash($entity->password);
 
-        return new User($id, $entity->email, $entity->password);
+        return new User($id, $email, $password);
     }
 }

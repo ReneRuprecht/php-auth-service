@@ -34,7 +34,7 @@ test-application: test-db-migrate
 		fi
 
 test-integration: test-db-migrate
-		@output=$$(APP_ENV=test php bin/phpunit --testsuite application 2>&1); \
+		@output=$$(APP_ENV=test php bin/phpunit --testsuite integration 2>&1); \
 		code=$$?; \
 		if [ $$code -eq 0 ]; then \
 			echo "\033[0;32mOK\033[0m"; \

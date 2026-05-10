@@ -2,29 +2,27 @@
 
 namespace App\Auth\Domain;
 
-use Symfony\Component\Uid\UuidV7;
-
 class User
 {
     public function __construct(
-        private UuidV7 $id,
-        private string $email,
-        private string $password,
+        private UserID $id,
+        private UserEmail $email,
+        private UserPassword $password,
     ) {
     }
 
-    public function getId(): UuidV7
+    public function getUserID(): string
     {
-        return $this->id;
+        return $this->id->value();
     }
 
     public function getEmail(): string
     {
-        return $this->email;
+        return $this->email->value();
     }
 
     public function getPassword(): string
     {
-        return $this->password;
+        return $this->password->value();
     }
 }

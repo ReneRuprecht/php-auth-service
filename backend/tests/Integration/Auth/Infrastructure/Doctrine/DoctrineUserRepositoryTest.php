@@ -3,11 +3,13 @@
 namespace App\Tests\Auth\Infrastructure\Doctrine;
 
 use App\Auth\Domain\User;
+use App\Auth\Domain\UserEmail;
+use App\Auth\Domain\UserID;
+use App\Auth\Domain\UserPassword;
 use App\Auth\Infrastructure\Doctrine\DoctrineUserRepository;
 use App\Auth\Infrastructure\Doctrine\UserEntity;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 
 class DoctrineUserRepositoryTest extends KernelTestCase
 {
@@ -23,12 +25,13 @@ class DoctrineUserRepositoryTest extends KernelTestCase
     {
         $repo = self::getContainer()->get(DoctrineUserRepository::class);
 
-        $uid = Uuid::v7();
-        $email = $uid.'@example.com';
-        $user = new User($uid, $email, 'password');
+        $uid = UserID::newUserID();
+        $email = UserEmail::fromString($uid->value().'@example.com');
+        $password = UserPassword::fromHash('password');
+        $user = new User($uid, $email, $password);
         $repo->save($user);
 
-        $found = $this->em->getRepository(UserEntity::class)->findOneBy(['email' => $email]);
+        $found = $this->em->getRepository(UserEntity::class)->findOneBy(['email' => $email->value()]);
         self::assertNotNull($found);
     }
 }

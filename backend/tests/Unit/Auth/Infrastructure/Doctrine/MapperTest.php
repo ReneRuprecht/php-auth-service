@@ -3,6 +3,9 @@
 namespace App\Tests\Auth\Infrastructure\Doctrine;
 
 use App\Auth\Domain\User;
+use App\Auth\Domain\UserEmail;
+use App\Auth\Domain\UserID;
+use App\Auth\Domain\UserPassword;
 use App\Auth\Infrastructure\Doctrine\UserEntity;
 use App\Auth\Infrastructure\Doctrine\UserMapper;
 use PHPUnit\Framework\TestCase;
@@ -19,18 +22,17 @@ class MapperTest extends TestCase
 
         $user = UserMapper::toDomain($entity);
 
-        $this->assertNotEmpty($user->getId());
+        $this->assertNotEmpty($user->getUserID());
         $this->assertEquals('test@example.com', $user->getEmail());
         $this->assertNotEmpty($user->getPassword());
     }
 
     public function testToEntity(): void
     {
-        $user = new User(
-            Uuid::v7(),
-            'test@example.com',
-            'password'
-        );
+        $uid = UserID::newUserID();
+        $email = UserEmail::fromString('test@example.com');
+        $password = UserPassword::fromHash('password');
+        $user = new User($uid, $email, $password);
 
         $entity = UserMapper::toEntity($user);
 
