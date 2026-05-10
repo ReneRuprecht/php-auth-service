@@ -2,16 +2,15 @@
 .PHONY: help test db-migrate wait-db test-unit test-application test-integration test-db-migrate phpstan cf-fix cf-diff check
 
 help:
-		@echo " Commands:"
-		@echo " db-migrate            run db migrations"
-		@echo " test-unit             run unit tests"
-		@echo " test-application      run application tests"
-		@echo " test-integration      run integration tests"
-		@echo " test-db-migrate       run test db migrations"
-		@echo " phpstan               run phpstan analyze src tests"
-		@echo " cf-fix                run cs-fixer fix"
-		@echo " cf-diff               run cs-fixer fix --dry-run --diff"
-		@echo " check                 run phpstan, cf-diff"
+		@echo " make db-migrate            run db migrations"
+		@echo " make test-unit             run unit tests"
+		@echo " make test-application      run application tests"
+		@echo " make test-integration      run integration tests"
+		@echo " make test-db-migrate       run test db migrations"
+		@echo " make phpstan               run phpstan analyze src tests"
+		@echo " make cf-fix                run cs-fixer fix"
+		@echo " make cf-diff               run cs-fixer fix --dry-run --diff"
+		@echo " make check                 run phpstan, cf-diff"
 
 db-migrate:
 	php bin/console doctrine:migrations:migrate --no-interaction

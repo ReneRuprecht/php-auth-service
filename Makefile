@@ -3,10 +3,12 @@
 COMPOSE = docker compose -f ./docker-compose.dev.yml
 
 help:
-	@echo " make up           Start dev environment"
-	@echo " make down         Stop containers"
-	@echo " make clean        Stop containers and remove volumes"
-	@echo " make app-shell    Open shell in app container"
+	@echo " make up             Start dev environment"
+	@echo " make down           Stop containers"
+	@echo " make clean          Stop containers and remove volumes"
+	@echo " make app-shell      Open shell in app container"
+	@echo " make test-db-up     Start test db"
+	@echo " make test-db-reset  Clean test db volume"
 
 up:
 	@echo "Starting dev environment"
