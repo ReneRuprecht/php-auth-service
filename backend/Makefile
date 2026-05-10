@@ -1,5 +1,5 @@
 
-.PHONY: help test db-migrate wait-db test-unit test-application test-integration test-db-migrate phpstan cs-fix cs-diff check
+.PHONY: help test db-migrate wait-db test-unit test-application test-integration test-db-migrate phpstan cf-fix cf-diff check
 
 help:
 		@echo " Commands:"
@@ -9,8 +9,8 @@ help:
 		@echo " test-integration      run integration tests"
 		@echo " test-db-migrate       run test db migrations"
 		@echo " phpstan               run phpstan analyze src tests"
-		@echo " cs-fix                run cs-fixer fix"
-		@echo " cs-diff               run cs-fixer fix --dry-run --diff"
+		@echo " cf-fix                run cs-fixer fix"
+		@echo " cf-diff               run cs-fixer fix --dry-run --diff"
 		@echo " check                 run phpstan, cf-diff"
 
 db-migrate:
