@@ -2,7 +2,7 @@
 
 namespace App\Auth\Application;
 
-class RegisterUserDto
+class LoginUserDto
 {
     public function __construct(
         public readonly string $email,

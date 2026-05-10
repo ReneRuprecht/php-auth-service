@@ -2,6 +2,7 @@
 
 namespace App\Auth\Infrastructure\Http\Controller;
 
+use App\Auth\Domain\Exception\InvalidCredentialsException;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -15,7 +16,8 @@ class ExceptionListener
 
         $response = match (true) {
             $e instanceof \InvalidArgumentException => new JsonResponse(['error' => $e->getMessage()], 400) ,
-            default => new JsonResponse(['error' => 'Internal Server Error'], 500) ,
+            $e instanceof InvalidCredentialsException => new JsonResponse(['error' => $e->getMessage()], 401) ,
+            default => new JsonResponse(['error' => 'Internal Server Error'.$e->getMessage()], 500) ,
         };
 
         $event->setResponse($response);

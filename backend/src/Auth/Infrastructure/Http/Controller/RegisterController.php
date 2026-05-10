@@ -7,13 +7,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-class AuthController
+class RegisterController
 {
     public function __construct(private RegisterUser $registerUser)
     {
     }
 
-    #[Route('api/v1/register', name: 'register', methods: ['POST'])]
+    #[Route('/api/v1/register', name: 'register', methods: ['POST'])]
     public function register(Request $request): JsonResponse
     {
         $dto = UserDtoMapper::toRegisterUserDto($request);

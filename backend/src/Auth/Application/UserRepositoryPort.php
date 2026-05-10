@@ -3,10 +3,11 @@
 namespace App\Auth\Application;
 
 use App\Auth\Domain\User;
+use App\Auth\Domain\UserEmail;
 
 interface UserRepositoryPort
 {
     public function save(User $user): void;
 
-    public function findByEmail(string $email): ?User;
+    public function findByEmail(UserEmail $email): ?User;
 }

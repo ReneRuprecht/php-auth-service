@@ -16,7 +16,7 @@ class UserEmail
     public static function fromString(string $email): self
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidEmailException('Invalid email address');
+            throw new InvalidEmailException();
         }
 
         return new self($email);

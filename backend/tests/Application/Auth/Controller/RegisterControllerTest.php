@@ -4,9 +4,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Uid\Uuid;
 
-class AuthControllerTest extends WebTestCase
+class RegisterControllerTest extends WebTestCase
 {
-    public function testAuthController(): void
+    public function testRegisterController(): void
     {
         $client = static::createClient();
 

@@ -4,6 +4,7 @@ namespace App\Auth\Infrastructure\Doctrine;
 
 use App\Auth\Application\UserRepositoryPort;
 use App\Auth\Domain\User;
+use App\Auth\Domain\UserEmail;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DoctrineUserRepository implements UserRepositoryPort
@@ -20,11 +21,11 @@ class DoctrineUserRepository implements UserRepositoryPort
         $this->em->flush();
     }
 
-    public function findByEmail(string $email): ?User
+    public function findByEmail(UserEmail $email): ?User
     {
         $entity = $this->em
           ->getRepository(UserEntity::class)
-          ->findOneBy(['email' => $email]);
+          ->findOneBy(['email' => $email->value()]);
 
         if (!$entity) {
             return null;

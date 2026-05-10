@@ -16,7 +16,7 @@ class UserPassword
     public static function fromHash(string $hash): self
     {
         if ('' == trim($hash)) {
-            throw new InvalidPasswordException('Password cannot be empty');
+            throw new InvalidPasswordException();
         }
 
         return new self($hash);

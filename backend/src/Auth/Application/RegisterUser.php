@@ -20,13 +20,13 @@ class RegisterUser
     public function execute(RegisterUserDto $dto): void
     {
         $id = UserID::newUserID();
-        $email = UserEmail::fromString($dto->getEmail());
-        $plain = $dto->getPassword();
+        $email = UserEmail::fromString($dto->email);
+        $plain = $dto->password;
 
         if ('' == trim($plain)) {
-            throw new InvalidPasswordException('Password cannot be empty');
+            throw new InvalidPasswordException();
         }
-        $hash = $this->hasher->hash($dto->getPassword());
+        $hash = $this->hasher->hash($dto->password);
         $password = UserPassword::fromHash($hash);
 
         $user = new User(
