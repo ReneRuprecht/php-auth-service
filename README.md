@@ -7,13 +7,10 @@ Ein schlanker Authentifizierungs-Service auf Basis von Symfony.
 Funktionen:
 - Benutzerregistrierung
 - Passwort-Hashing
+- Login, Jwt response
+- Jwt Validierung
 - Use-Case basierte Architektur
 - PostgreSQL + Doctrine
-
-## ToDo
-
-- Login
-- Token
 
 ## Architektur
 
@@ -72,6 +69,43 @@ Response:
 ```json
 {
     "status": "created"
+}
+```
+
+### login
+POST /api/v1/login
+
+Request:
+```json
+{
+    "email": "email@example.com",
+    "password": "password"
+}
+```
+
+Response:
+```json
+{
+    "token": "jwt"
+}
+```
+
+### verify
+POST /api/v1/verify
+
+Request:
+```json
+{
+    "token": "email@example.com"
+}
+```
+
+Response:
+```json
+{
+    "valid": "true|false",
+    "userID": "id",
+    "email": "email"
 }
 ```
 
