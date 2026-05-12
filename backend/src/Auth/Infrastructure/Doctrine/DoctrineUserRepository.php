@@ -2,7 +2,7 @@
 
 namespace App\Auth\Infrastructure\Doctrine;
 
-use App\Auth\Application\UserRepositoryPort;
+use App\Auth\Application\Port\UserRepositoryPort;
 use App\Auth\Domain\User;
 use App\Auth\Domain\UserEmail;
 use Doctrine\ORM\EntityManagerInterface;

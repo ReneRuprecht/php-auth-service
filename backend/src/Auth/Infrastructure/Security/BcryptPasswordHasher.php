@@ -2,7 +2,7 @@
 
 namespace App\Auth\Infrastructure\Security;
 
-use App\Auth\Application\PasswordHasherPort;
+use App\Auth\Application\Port\PasswordHasherPort;
 
 class BcryptPasswordHasher implements PasswordHasherPort
 {

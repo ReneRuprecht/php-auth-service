@@ -2,6 +2,9 @@
 
 namespace App\Auth\Application;
 
+use App\Auth\Application\Dto\RegisterUserDto;
+use App\Auth\Application\Port\PasswordHasherPort;
+use App\Auth\Application\Port\UserRepositoryPort;
 use App\Auth\Domain\Exception\InvalidPasswordException;
 use App\Auth\Domain\User;
 use App\Auth\Domain\UserEmail;

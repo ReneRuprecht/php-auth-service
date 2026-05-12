@@ -12,9 +12,9 @@ class UserMapper
     public static function toEntity(User $user): UserEntity
     {
         $entity = new UserEntity();
-        $entity->id = $user->getUserID();
-        $entity->email = $user->getEmail();
-        $entity->password = $user->getPassword();
+        $entity->id = $user->getUserID()->value();
+        $entity->email = $user->getEmail()->value();
+        $entity->password = $user->getPassword()->value();
 
         return $entity;
     }

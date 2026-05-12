@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Auth\Application;
+namespace App\Auth\Application\Port;
 
 use App\Auth\Domain\User;
 use App\Auth\Domain\UserEmail;

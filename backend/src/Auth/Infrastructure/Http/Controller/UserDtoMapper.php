@@ -2,8 +2,8 @@
 
 namespace App\Auth\Infrastructure\Http\Controller;
 
-use App\Auth\Application\LoginUserDto;
-use App\Auth\Application\RegisterUserDto;
+use App\Auth\Application\Dto\LoginUserDto;
+use App\Auth\Application\Dto\RegisterUserDto;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserDtoMapper

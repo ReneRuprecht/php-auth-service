@@ -11,18 +11,18 @@ class User
     ) {
     }
 
-    public function getUserID(): string
+    public function getUserID(): UserID
     {
-        return $this->id->value();
+        return $this->id;
     }
 
-    public function getEmail(): string
+    public function getEmail(): UserEmail
     {
-        return $this->email->value();
+        return $this->email;
     }
 
-    public function getPassword(): string
+    public function getPassword(): UserPassword
     {
-        return $this->password->value();
+        return $this->password;
     }
 }

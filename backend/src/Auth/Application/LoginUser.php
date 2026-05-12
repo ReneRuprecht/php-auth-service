@@ -2,6 +2,11 @@
 
 namespace App\Auth\Application;
 
+use App\Auth\Application\Dto\LoginResultDto;
+use App\Auth\Application\Dto\LoginUserDto;
+use App\Auth\Application\Port\PasswordHasherPort;
+use App\Auth\Application\Port\TokenServicePort;
+use App\Auth\Application\Port\UserRepositoryPort;
 use App\Auth\Domain\Exception\InvalidCredentialsException;
 use App\Auth\Domain\UserEmail;
 
@@ -24,7 +29,7 @@ class LoginUser
             throw new InvalidCredentialsException();
         }
 
-        if (!$this->hasher->verify($dto->password, $user->getPassword())) {
+        if (!$this->hasher->verify($dto->password, $user->getPassword()->value())) {
             throw new InvalidCredentialsException();
         }
 

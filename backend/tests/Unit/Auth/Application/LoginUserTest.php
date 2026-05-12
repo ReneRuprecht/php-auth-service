@@ -2,11 +2,11 @@
 
 namespace App\Tests\Unit\Auth\Application;
 
+use App\Auth\Application\Dto\LoginUserDto;
 use App\Auth\Application\LoginUser;
-use App\Auth\Application\LoginUserDto;
-use App\Auth\Application\PasswordHasherPort;
-use App\Auth\Application\TokenServicePort;
-use App\Auth\Application\UserRepositoryPort;
+use App\Auth\Application\Port\PasswordHasherPort;
+use App\Auth\Application\Port\TokenServicePort;
+use App\Auth\Application\Port\UserRepositoryPort;
 use App\Auth\Domain\Exception\InvalidCredentialsException;
 use App\Auth\Domain\User;
 use App\Auth\Domain\UserEmail;
@@ -30,7 +30,7 @@ class LoginUserTest extends TestCase
         $tokenService = $this->createMock(TokenServicePort::class);
 
         $repo->expects($this->once())->method('findByEmail')->with($email)->willReturn($user);
-        $hasher->expects($this->once())->method('verify')->with($dto->password, $user->getPassword())->willReturn(true);
+        $hasher->expects($this->once())->method('verify')->with($dto->password, $user->getPassword()->value())->willReturn(true);
         $tokenService->expects($this->once())->method('create')->willReturn('fake-token');
 
         $useCase = new LoginUser($repo, $hasher, $tokenService);
@@ -72,7 +72,7 @@ class LoginUserTest extends TestCase
         $tokenService = $this->createMock(TokenServicePort::class);
 
         $repo->expects($this->once())->method('findByEmail')->with($email)->willReturn($user);
-        $hasher->expects($this->once())->method('verify')->with($dto->password, $user->getPassword())->willReturn(false);
+        $hasher->expects($this->once())->method('verify')->with($dto->password, $user->getPassword()->value())->willReturn(false);
         $tokenService->expects($this->never())->method('create');
 
         $useCase = new LoginUser($repo, $hasher, $tokenService);

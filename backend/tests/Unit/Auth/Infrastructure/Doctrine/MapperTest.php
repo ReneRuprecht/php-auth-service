@@ -22,9 +22,9 @@ class MapperTest extends TestCase
 
         $user = UserMapper::toDomain($entity);
 
-        $this->assertNotEmpty($user->getUserID());
-        $this->assertEquals('test@example.com', $user->getEmail());
-        $this->assertNotEmpty($user->getPassword());
+        $this->assertNotEmpty($user->getUserID()->value());
+        $this->assertEquals('test@example.com', $user->getEmail()->value());
+        $this->assertNotEmpty($user->getPassword()->value());
     }
 
     public function testToEntity(): void

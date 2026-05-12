@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Auth\Application;
+namespace App\Auth\Application\Dto;
 
-class LoginUserDto
+class RegisterUserDto
 {
     public function __construct(
         public readonly string $email,
